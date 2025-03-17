@@ -16,6 +16,7 @@
 - 修复了播放页部分提示框未成功关闭导致程序卡住的bug;
 - 修复了下载器报错不保存日志的bug;
 - `configs.ini`文件新增**是否静音**选项;
+- 新增对**Mac系统**的支持，可在macOS上正常运行;
 - 其他代码层面调整优化, 提高了程序稳定性.
 
 如若此版本存在稳定性bug，请及时提出issue  ~
@@ -39,6 +40,7 @@
 - **检测视频是否暂停并续播**
 - **支持刷习惯分**
 - **支持智慧共享课**
+- **支持Windows和Mac系统**
 - 检测当前学习进度并后台实时更新
 - 根据当前时间自动设置背景颜色(白昼/暗夜)
 - 完成章节时将提示已刷课时长
@@ -46,13 +48,14 @@
 
 #### 二、使用须知:
 
-1.请确保系统为windows10及以上
+1.请确保系统为Windows 10及以上或macOS系统
 
 2.文件夹内有 **configs.ini文件** (可能没显示 **.ini**后缀名)，请用文本编辑器打开;
 
 3.填写配置文件
 
-- 默认启动Edge(win10及以上自带), 也可指定为Chrome
+- Windows系统默认启动Edge(win10及以上自带), 也可指定为Chrome
+- Mac系统默认推荐使用Chrome浏览器
 - 文件里的 **EXE_PATH项** 用于自定义浏览器路径, 但必须精确到**浏览器可执行文件的位置**;
 
 ​    若不填此项, 就会启动位于系统默认位置的浏览器。
@@ -65,9 +68,9 @@
 
 <img src="https://i-blog.csdnimg.cn/direct/e3f06598535c4b48bc1e8a52eb2d0ef8.png"/>
 
-4.运行 **Autovisor.exe**，会自动打开浏览器，进入网课界面后就能自动刷课了 !
+5.运行 **Autovisor.exe**(Windows)或**Autovisor**(Mac)，会自动打开浏览器，进入网课界面后就能自动刷课了!
 
-(如果未设置 **enableAutoCaptcha=True**, 则需要**手动完成**登录时的滑块验证.)
+(如果未设置 **enableAutoCaptcha=True**, 则需要**手动完成**登录时的滑块验证.)
 
 ------
 
@@ -78,6 +81,11 @@ Github: [Releases · CXRunfree/Autovisor (github.com)](https://github.com/CXRunf
 网盘备用: [[蓝奏云\] Autovisor-for-windows](https://wwk.lanzouj.com/b05evsxif) 密码:492l
 
 这是已经打包好的程序, 若需要**源代码**请于Github项目主页下载.
+
+**Mac用户**请从Github下载源代码，按照以下步骤运行:
+1. 安装Python环境
+2. 在终端中运行 `pip install -r requirements.txt` 安装依赖
+3. 运行 `python Autovisor.py` 启动程序
 
 #### 四、常见问题 :
 
@@ -99,11 +107,11 @@ Github: [Releases · CXRunfree/Autovisor (github.com)](https://github.com/CXRunf
 
 4.我想自定义要启动的浏览器, 但是找不到装在哪里? 
 
-- 打开你的浏览器, 在地址栏中输入 Chrome://version 回车之后, 如图的"可执行文件目录" 就是浏览器安装目录了。
-
-  
+- Windows: 打开你的浏览器, 在地址栏中输入 Chrome://version 回车之后, 如图的"可执行文件目录" 就是浏览器安装目录了。
   
   <img src="https://i-blog.csdnimg.cn/blog_migrate/e8fd696257e0b4623a19d4a9e0448bfd.png" alt="img">
+
+- Mac: Chrome浏览器的路径通常为 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
 
 5.关于弹题关不掉/程序卡住的问题:
 
@@ -113,6 +121,11 @@ Github: [Releases · CXRunfree/Autovisor (github.com)](https://github.com/CXRunf
 6.我已经打赏过了,不希望再弹赞赏码怎么办?
 
 - 感谢您对本项目的支持~ ~  只需要删掉`res/QRcode.jpg`文件就好了 !
+
+7.Mac系统上安装依赖时遇到问题怎么办?
+
+- 确保安装了Python环境后，尝试使用 `python -m pip install -r requirements.txt` 命令安装依赖
+- 如遇到权限问题，可尝试 `sudo pip install -r requirements.txt` 命令
 
 ------
 

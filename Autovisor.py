@@ -42,6 +42,13 @@ async def auto_login(page: Page, modules=None):
 async def init_page(p: Playwright) -> tuple[Page, Browser]:
     driver = "msedge" if config.driver == "edge" else config.driver
     logger.info(f"正在启动{config.driver}浏览器...")
+    
+    # 针对不同系统使用不同的浏览器启动方式
+    if sys.platform == 'darwin':  # macOS系统
+        if config.driver == 'edge' and not config.exe_path:
+            logger.warn("Mac系统不建议使用Edge浏览器，将尝试使用Chrome浏览器")
+            driver = "chrome"
+    
     browser = await p.chromium.launch(
         channel=driver,
         headless=False,
@@ -236,4 +243,8 @@ if __name__ == "__main__":
             logger.error("系统出错,请检查后重新启动!")
     finally:
         logger.save()
-        os.system("pause")
+        # 根据不同系统执行不同的暂停命令
+        if sys.platform == 'win32':
+            os.system("pause")
+        else:
+            input("按回车键继续...")

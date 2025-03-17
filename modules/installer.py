@@ -44,11 +44,27 @@ def extract_whl(whl_file, extract_to):
 
 
 def get_system_arch():
+    system = platform.system()
     arch = platform.architecture()[0]
-    if arch == "64bit":
-        return "win_amd64"
-    else:
-        return "win32"
+    machine = platform.machine()
+    
+    if system == "Darwin":  # macOS系统
+        if machine == "arm64":  # M系列芯片
+            return "macosx_11_0_arm64"
+        else:  # Intel芯片
+            return "macosx_10_9_x86_64"
+    elif system == "Windows":  # Windows系统
+        if arch == "64bit":
+            return "win_amd64"
+        else:
+            return "win32"
+    else:  # 其他系统（如Linux）
+        if "arm" in machine or "aarch64" in machine:
+            return "manylinux2014_aarch64"
+        elif arch == "64bit":
+            return "manylinux2014_x86_64"
+        else:
+            return "manylinux2014_i686"
 
 
 def download_wheel(mirror_name, base_url, package_name, version=None):
@@ -61,8 +77,8 @@ def download_wheel(mirror_name, base_url, package_name, version=None):
     response.raise_for_status()
     # 获取系统架构
     arch = get_system_arch()
-    # 匹配 .whl 文件链接
-    pattern = re.compile(rf'href="(?:\.\./)*([^"]+{arch}\.whl[^"]+)"')
+    # 匹配 .whl 文件链接，更新正则表达式以适配Mac和Windows
+    pattern = re.compile(rf'href="(?:\.\./)*([^"]+(?:{arch}|{package_name}[^"]*(?:any|none)[^"]*)\.whl[^"]*)"')
     whl_links = pattern.findall(response.text)
     if not whl_links:
         raise ValueError(f"没有找到合适版本的 {package_name}.whl 文件!")
