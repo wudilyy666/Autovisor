@@ -43,12 +43,7 @@ async def init_page(p: Playwright) -> tuple[Page, Browser]:
     driver = "msedge" if config.driver == "edge" else config.driver
     logger.info(f"正在启动{config.driver}浏览器...")
     
-    # 针对不同系统使用不同的浏览器启动方式
-    if sys.platform == 'darwin':  # macOS系统
-        if config.driver == 'edge' and not config.exe_path:
-            logger.warn("Mac系统不建议使用Edge浏览器，将尝试使用Chrome浏览器")
-            driver = "chrome"
-    
+    # 支持所有系统使用Edge或Chrome
     browser = await p.chromium.launch(
         channel=driver,
         headless=False,
