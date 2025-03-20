@@ -16,6 +16,7 @@ class Config:
             self.password = self._config.get('user-account', 'password', raw=True)
             self.enableAutoCaptcha = self.get_bool_field('custom-option', 'enableAutoCaptcha')
             self.soundOff = self.get_bool_field('custom-option', 'soundOff')
+            self.startFromCourse = self.get_start_course()
             self.course_match_rule = re.compile("https://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]")
             self.course_urls = self.get_course_urls()
         # 登录
@@ -61,6 +62,16 @@ class Config:
             return True
         else:
             return False
+
+    def get_start_course(self) -> int:
+        """获取从第几个大课开始观看的配置"""
+        try:
+            start_course = int(self._config.get('custom-option', 'startFromCourse', raw=True))
+            if start_course < 1:
+                return 1
+            return start_course
+        except (ValueError, configparser.NoOptionError):
+            return 1
 
     def get_course_urls(self) -> list:
         course_urls = []

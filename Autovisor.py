@@ -185,9 +185,22 @@ async def main():
         skip_ques_task = asyncio.create_task(skip_questions(page, event_loop_answer))
         play_video_task = asyncio.create_task(play_video(page))
         tasks.extend([verify_task, video_optimize_task, skip_ques_task, play_video_task])
+        
+        # 根据配置，从第N个大课开始观看
+        start_index = config.startFromCourse - 1
+        if start_index < 0:
+            start_index = 0
+        if start_index >= len(config.course_urls):
+            logger.warn(f"指定的起始大课序号({config.startFromCourse})超出了实际大课数量({len(config.course_urls)})")
+            start_index = 0
+            
+        if start_index > 0:
+            logger.info(f"根据配置，将从第{config.startFromCourse}个大课开始观看")
+            
         # 遍历所有课程,加载网页
-        for course_url in config.course_urls:
+        for i, course_url in enumerate(config.course_urls[start_index:], start=start_index + 1):
             print("==" * 10)
+            logger.info(f"当前处理第{i}个大课")
             is_new_version = "fusioncourseh5" in course_url
             logger.info("正在加载播放页...")
             await page.goto(course_url, wait_until="commit")
